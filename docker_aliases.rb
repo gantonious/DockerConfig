@@ -1,7 +1,7 @@
 require 'yaml'
 require 'optparse'
 
-DEFAUILT_DOCKER_CONFIG_LOCATION = ENV['userprofile'] + "\\dockerconfig.yml"
+DEFAUILT_DOCKER_CONFIG_LOCATION = ENV["HOME"] + "/.dockerconfig.yml"
 
 class DockerConfig
     DOCKER_CONFIG_ALIASES_KEY = 'aliases'
@@ -24,7 +24,7 @@ class DockerConfig
 end
 
 def expand_alias_for(docker_command, alias_name, expanded_command)
-    docker_command.sub(/[ ]+${alias_name}[ ]+/, " #{expanded_command} ")
+    docker_command.sub(/(^|\s+)#{alias_name}(\s+|$)/, " #{expanded_command} ")
 end
 
 def expand_aliases_for(docker_command, docker_config)
@@ -34,6 +34,6 @@ def expand_aliases_for(docker_command, docker_config)
 end
 
 config = DockerConfig.from_file(DEFAUILT_DOCKER_CONFIG_LOCATION)
-puts expand_aliases_for("docker c ", config)
+puts expand_aliases_for(ARGV[0], config)
 
 
